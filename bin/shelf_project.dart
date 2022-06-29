@@ -1,5 +1,15 @@
-import 'package:shelf_project/shelf_project.dart' as shelf_project;
+import 'package:shelf/shelf.dart';
 
-void main(List<String> arguments) {
-  print('Hello world: ${shelf_project.calculate()}!');
+import 'api/blog_api.dart';
+import 'api/login_api.dart';
+import 'infra/custom_server.dart';
+
+void main() async {
+  var cascadeHandler =
+      Cascade().add(LoginApi().handler).add(BlogApi().handler).handler;
+
+  var handler =
+      Pipeline().addMiddleware(logRequests()).addHandler(cascadeHandler);
+
+  await CustomServer().initialize(handler);
 }
