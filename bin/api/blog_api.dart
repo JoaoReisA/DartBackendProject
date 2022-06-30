@@ -18,9 +18,6 @@ class BlogApi {
       final response = news.map((e) => e.toJson()).toList().toString();
       return Response.ok(
         response,
-        headers: {
-          "content-type": "application/json",
-        },
       );
     });
 
