@@ -14,15 +14,23 @@ class BlogApi {
 
     //listagem
     router.get('/blog/noticias', (Request req) {
-      _service.findALl();
-      return Response.ok('Choveu hoje');
+      List<NewsModel> news = _service.findALl();
+      final response = news.map((e) => e.toJson()).toList().toString();
+      return Response.ok(
+        response,
+        headers: {
+          "content-type": "application/json",
+        },
+      );
     });
 
     // nova noticias
-    router.post('/blog/noticias', (Request req) {
-      // _service.save('');
+    router.post('/blog/noticias', (Request req) async {
+      String body = await req.readAsString();
 
-      return Response.ok('Choveu hoje');
+      _service.save(NewsModel.fromJson(body));
+
+      return Response(201);
     });
 
     // /blog/noticias?id=1 update
